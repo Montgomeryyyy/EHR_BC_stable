@@ -18,6 +18,7 @@ from corebehrt.functional.io_operations.save import save_pids_splits
 
 CONFIG_PATH = "./corebehrt/configs/prepare_pretrain.yaml"
 from corebehrt.constants.paths import FOLDS_FILE, TEST_PIDS_FILE
+from corebehrt.modules.preparation.dataset import PatientDataset
 
 
 def main_prepare_data(config_path):
@@ -49,7 +50,7 @@ def main_prepare_data(config_path):
         logger = logging.getLogger("prepare finetune data")
         logger.info("Preparing finetune data")
         # Prepare data
-        _ = DatasetPreparer(cfg).prepare_finetune_data()
+        _ = DatasetPreparer(cfg).prepare_finetune_data(mode="tuning")
 
         # Save splits from cohort selection
         folds_path = get_splits_path(cfg.paths)
@@ -59,6 +60,24 @@ def main_prepare_data(config_path):
         if os.path.exists(test_pids_file):
             test_pids = torch.load(test_pids_file)
             torch.save(test_pids, join(cfg.paths.prepared_data, TEST_PIDS_FILE))
+    
+    elif cfg.data.type == "held_out":
+        DirectoryPreparer(cfg).setup_prepare_held_out()
+        logger = logging.getLogger("prepare held_out data")
+        logger.info("Preparing held_out data")
+        # Prepare data
+        _ = DatasetPreparer(cfg).prepare_finetune_data(mode="held_out")
+
+    elif cfg.data.type == "all":
+        DirectoryPreparer(cfg).setup_prepare_held_out()
+        logger = logging.getLogger("prepare held_out data")
+        logger.info("Preparing held_out data")
+        # Prepare data
+        pt_data = DatasetPreparer(cfg).prepare_finetune_data(mode="train")
+        ft_data = DatasetPreparer(cfg).prepare_finetune_data(mode="tuning")
+        ho_data = DatasetPreparer(cfg).prepare_finetune_data(mode="held_out")
+        combined_data = PatientDataset.combine_datasets([pt_data, ft_data, ho_data])
+        data.save(cfg.paths.prepared_data)
 
     else:
         raise ValueError(f"Unsupported data type: {cfg.data.type}")
