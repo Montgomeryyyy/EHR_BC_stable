@@ -105,7 +105,6 @@ class DatasetPreparer:
         data.patients = data.process_in_parallel(
             censor_patient, censor_dates=censor_dates
         )
-        print(data.patients)
         background_length = get_background_length(data, vocab)
         # Exclude short sequences
         logger.info("Excluding short sequences")

@@ -70,7 +70,6 @@ def main_prepare_data(config_path):
 
     elif cfg.data.type == "all":
         DirectoryPreparer(cfg).setup_prepare_held_out()
-        print(cfg)
         logger = logging.getLogger("prepare held_out data")
         logger.info("Preparing held_out data")
         # Prepare data

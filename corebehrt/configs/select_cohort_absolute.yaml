@@ -5,7 +5,7 @@ logging:
 paths:
   ### Inputs
   patients_info: ./outputs/features/patient_info.parquet
-  initial_pids: ./outputs/tokenized/pids_tuning.pt # Initial patients to select from [list of pids] (optional)
+  #initial_pids: ./outputs/tokenized/pids_tuning.pt # Initial patients to select from [list of pids] (optional)
   outcomes: ./outputs/outcomes
   outcome: TEST_OUTCOME.csv # Outcome
   # exclude_pids: # optional, if provided, exclude these pids from the cohort
@@ -27,7 +27,7 @@ index_date: # if not provided we can use exposures to get the index dates
   mode: absolute # absolute or relative (to exposure)
   absolute:
     date: 
-      year: 2000
+      year: 2020
       month: 1
       day: 1
     test_shift_hours: 48 # shift the test set by this many hours
