@@ -2,7 +2,7 @@ from typing import List
 
 import numpy as np
 from torch.utils.data import WeightedRandomSampler
-
+import pandas as pd
 
 def get_sampler(cfg, outcomes: List[int]):
     """Get sampler for training data.
@@ -13,9 +13,23 @@ def get_sampler(cfg, outcomes: List[int]):
     def _inverse_sqrt(x):
         return 1 / np.sqrt(x)
 
+    def _serge(outcomes):
+        labels = pd.Series(outcomes)
+        beta = (len(outcomes) - 1) / len(outcomes)
+        n0 = labels.value_counts()[0]
+        n1 = labels.value_counts()[1]
+        E0 = (1 - (beta ** n0)) / (1 - beta)
+        E1 = (1 - (beta ** n1)) / (1 - beta)
+        probs = [E0 / (E0 + E1), E1 / (E0 + E1)]
+        weights = [probs[label] / labels.value_counts()[label] for label in labels]
+        return weights
+
     if cfg.trainer_args.get("sampler", None):
         _, counts = np.unique(np.array(outcomes), return_counts=True)
-        label_weight = _inverse_sqrt(counts)
+        if cfg.trainer_args.get("sample_weight_function", None) == "serge":
+            label_weight = _serge(outcomes)
+        else:
+            label_weight = _inverse_sqrt(counts)
 
         sampler = WeightedRandomSampler(
             weights=label_weight, num_samples=len(outcomes), replacement=True
