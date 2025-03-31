@@ -566,3 +566,27 @@
 2025-03-29 18:43:29,446 - corebehrt.modules.setup.manager - INFO - Initializing model
 2025-03-29 18:43:29,447 - corebehrt.modules.setup.initializer - INFO - Loading model from checkpoint
 2025-03-29 18:43:29,458 - corebehrt.modules.setup.loader - WARNING - missing state dict keys: []
+2025-03-31 16:01:24,373 - corebehrt.modules.setup.manager - INFO - Checkpoint model path: ./outputs/finetuning/fold_1
+2025-03-31 16:01:24,375 - corebehrt.modules.setup.loader - INFO - No checkpoint provided. Loading last checkpoint.
+2025-03-31 16:01:24,375 - corebehrt.modules.setup.loader - INFO - Loading checkpoint from ./outputs/finetuning/fold_1/checkpoints/checkpoint_epoch999_end.pt
+2025-03-31 16:01:24,376 - corebehrt.modules.setup.manager - INFO - Initializing model
+2025-03-31 16:01:24,376 - corebehrt.modules.setup.initializer - INFO - Loading model from checkpoint
+2025-03-31 16:01:24,387 - corebehrt.modules.setup.loader - WARNING - missing state dict keys: []
+2025-03-31 16:01:24,498 - corebehrt.modules.setup.manager - INFO - Checkpoint model path: ./outputs/finetuning/fold_2
+2025-03-31 16:01:24,498 - corebehrt.modules.setup.loader - INFO - No checkpoint provided. Loading last checkpoint.
+2025-03-31 16:01:24,498 - corebehrt.modules.setup.loader - INFO - Loading checkpoint from ./outputs/finetuning/fold_2/checkpoints/checkpoint_epoch999_end.pt
+2025-03-31 16:01:24,499 - corebehrt.modules.setup.manager - INFO - Initializing model
+2025-03-31 16:01:24,502 - corebehrt.modules.setup.initializer - INFO - Loading model from checkpoint
+2025-03-31 16:01:24,513 - corebehrt.modules.setup.loader - WARNING - missing state dict keys: []
+2025-03-31 16:11:44,776 - corebehrt.modules.setup.manager - INFO - Checkpoint model path: ./outputs/finetuning/fold_1
+2025-03-31 16:11:44,779 - corebehrt.modules.setup.loader - INFO - No checkpoint provided. Loading last checkpoint.
+2025-03-31 16:11:44,780 - corebehrt.modules.setup.loader - INFO - Loading checkpoint from ./outputs/finetuning/fold_1/checkpoints/checkpoint_epoch999_end.pt
+2025-03-31 16:11:44,781 - corebehrt.modules.setup.manager - INFO - Initializing model
+2025-03-31 16:11:44,781 - corebehrt.modules.setup.initializer - INFO - Loading model from checkpoint
+2025-03-31 16:11:44,794 - corebehrt.modules.setup.loader - WARNING - missing state dict keys: []
+2025-03-31 16:11:44,899 - corebehrt.modules.setup.manager - INFO - Checkpoint model path: ./outputs/finetuning/fold_2
+2025-03-31 16:11:44,899 - corebehrt.modules.setup.loader - INFO - No checkpoint provided. Loading last checkpoint.
+2025-03-31 16:11:44,899 - corebehrt.modules.setup.loader - INFO - Loading checkpoint from ./outputs/finetuning/fold_2/checkpoints/checkpoint_epoch999_end.pt
+2025-03-31 16:11:44,901 - corebehrt.modules.setup.manager - INFO - Initializing model
+2025-03-31 16:11:44,901 - corebehrt.modules.setup.initializer - INFO - Loading model from checkpoint
+2025-03-31 16:11:44,913 - corebehrt.modules.setup.loader - WARNING - missing state dict keys: []

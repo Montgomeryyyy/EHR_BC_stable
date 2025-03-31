@@ -27,7 +27,7 @@ index_date: # if not provided we can use exposures to get the index dates
   mode: absolute # absolute or relative (to exposure)
   absolute:
     date: 
-      year: 2020
+      year: 2000
       month: 1
       day: 1
     test_shift_hours: 48 # shift the test set by this many hours

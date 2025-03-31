@@ -45,6 +45,7 @@ class DatasetPreparer:
         self.processed_dir = cfg.paths.prepared_data
 
     def prepare_finetune_data(self, mode="tuning") -> PatientDataset:
+        print(self.cfg)
         outcome_cfg = self.cfg.outcome
         paths_cfg = self.cfg.paths
         data_cfg = self.cfg.data
@@ -104,6 +105,7 @@ class DatasetPreparer:
         data.patients = data.process_in_parallel(
             censor_patient, censor_dates=censor_dates
         )
+        print(data.patients)
         background_length = get_background_length(data, vocab)
         # Exclude short sequences
         logger.info("Excluding short sequences")

@@ -70,6 +70,7 @@ def main_prepare_data(config_path):
 
     elif cfg.data.type == "all":
         DirectoryPreparer(cfg).setup_prepare_held_out()
+        print(cfg)
         logger = logging.getLogger("prepare held_out data")
         logger.info("Preparing held_out data")
         # Prepare data
@@ -77,7 +78,7 @@ def main_prepare_data(config_path):
         ft_data = DatasetPreparer(cfg).prepare_finetune_data(mode="tuning")
         ho_data = DatasetPreparer(cfg).prepare_finetune_data(mode="held_out")
         combined_data = PatientDataset.combine_datasets([pt_data, ft_data, ho_data])
-        data.save(cfg.paths.prepared_data)
+        combined_data.save(cfg.paths.prepared_data)
 
     else:
         raise ValueError(f"Unsupported data type: {cfg.data.type}")
