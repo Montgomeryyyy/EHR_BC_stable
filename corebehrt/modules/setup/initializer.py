@@ -54,7 +54,8 @@ class Initializer:
     def initialize_finetune_model(self, train_dataset):
         if self.checkpoint:
             logger.info("Loading model from checkpoint")
-            add_config = {**self.cfg.model, pos_weight=get_pos_weight(self.cfg, train_dataset.outcomes)}
+            pos_weight = get_pos_weight(self.cfg, train_dataset.outcomes)
+            add_config = {**self.cfg.model, 'pos_weight': pos_weight}
             model = self.loader.load_model(
                 CorebehrtForFineTuning,
                 checkpoint=self.checkpoint,
