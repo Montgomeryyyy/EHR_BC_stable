@@ -40,7 +40,7 @@ def get_sampler(cfg, outcomes: List[int]):
 
 def get_pos_weight(cfg, outcomes):
     pos_weight = cfg.trainer_args.get('pos_weight', None)
-    if pos_weight is None:
+    if pos_weight is None or len(outcomes) == 0:
         return None
     if pos_weight == 'sqrt':
         outcomes_series = pd.Series(outcomes)

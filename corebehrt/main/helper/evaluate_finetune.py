@@ -22,7 +22,7 @@ def evaluate_fold(
     # Load model
     modelmanager_trained = ModelManager(cfg, fold)
     checkpoint = modelmanager_trained.load_checkpoint(checkpoints=True)
-    model = modelmanager_trained.initialize_finetune_model(checkpoint)
+    model = modelmanager_trained.initialize_finetune_model(checkpoint, [])
     print(f"Model loaded from {fold_folder}")
 
     # Run inference
