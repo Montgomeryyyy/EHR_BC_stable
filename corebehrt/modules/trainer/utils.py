@@ -39,12 +39,16 @@ def get_sampler(cfg, outcomes: List[int]):
         return None
 
 def get_pos_weight(cfg, outcomes):
-    if cfg.trainer_args['pos_weight'] == 'sqrt':
-        return np.sqrt(sum(pd.isna(outcomes)) / sum(pd.notna(outcomes)))
-    elif cfg.trainer_args['pos_weight'] == 'inverse':
-        return sum(pd.isna(outcomes)) / sum(pd.notna(outcomes))
-    elif cfg.trainer_args['pos_weight'] == 'serge':
-        labels = pd.Series(outcomes).notna().astype(int)
+    pos_weight = cfg.trainer_args.get('pos_weight', None)
+    if pos_weight is None:
+        return None
+    if pos_weight == 'sqrt':
+        outcomes_series = pd.Series(outcomes)
+        num_pos = (outcomes_series == 1).sum()
+        num_neg = outcomes_series.isna().sum()
+        return np.sqrt(num_neg / num_pos)
+    elif pos_weight == 'serge':
+        labels = pd.Series(outcomes).astype(int)
         beta = (len(outcomes)-1)/(len(outcomes))
         n0 = labels.value_counts()[0]
         n1 = labels.value_counts()[1]
@@ -52,8 +56,8 @@ def get_pos_weight(cfg, outcomes):
         alpha_1 = (1-beta)/(1-beta**n1)
         pos_weight = alpha_1/alpha_0
         return pos_weight
-    elif isinstance(cfg.trainer_args['pos_weight'], (int, float)):
-        return cfg.trainer_args['pos_weight'] 
+    elif isinstance(pos_weight, (int, float)):
+        return pos_weight
     else:
         return None
 
