@@ -45,7 +45,7 @@ def get_pos_weight(cfg, outcomes):
     if pos_weight == 'sqrt':
         outcomes_series = pd.Series(outcomes)
         num_pos = (outcomes_series == 1).sum()
-        num_neg = outcomes_series.isna().sum()
+        num_neg = (outcomes_series == 0).sum()
         return np.sqrt(num_neg / num_pos)
     elif pos_weight == 'serge':
         labels = pd.Series(outcomes).astype(int)
