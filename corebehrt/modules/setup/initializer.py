@@ -13,7 +13,7 @@ from corebehrt.modules.model.model import (
     CorebehrtForFineTuning,
 )
 from corebehrt.modules.setup.loader import ModelLoader
-from corebehrt.modules.trainer.utils import get_sampler
+from corebehrt.modules.trainer.utils import get_sampler, get_pos_weight
 
 logger = logging.getLogger(__name__)
 
@@ -51,10 +51,10 @@ class Initializer:
             )
         return model
 
-    def initialize_finetune_model(self):
+    def initialize_finetune_model(self, train_dataset):
         if self.checkpoint:
             logger.info("Loading model from checkpoint")
-            add_config = {**self.cfg.model}
+            add_config = {**self.cfg.model, pos_weight=get_pos_weight(self.cfg, train_dataset.outcomes)}
             model = self.loader.load_model(
                 CorebehrtForFineTuning,
                 checkpoint=self.checkpoint,

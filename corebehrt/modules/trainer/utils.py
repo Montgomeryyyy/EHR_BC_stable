@@ -38,6 +38,24 @@ def get_sampler(cfg, outcomes: List[int]):
     else:
         return None
 
+def get_pos_weight(cfg, outcomes):
+    if cfg.trainer_args['pos_weight'] == 'sqrt':
+        return np.sqrt(sum(pd.isna(outcomes)) / sum(pd.notna(outcomes)))
+    elif cfg.trainer_args['pos_weight'] == 'inverse':
+        return sum(pd.isna(outcomes)) / sum(pd.notna(outcomes))
+    elif cfg.trainer_args['pos_weight'] == 'serge':
+        labels = pd.Series(outcomes).notna().astype(int)
+        beta = (len(outcomes)-1)/(len(outcomes))
+        n0 = labels.value_counts()[0]
+        n1 = labels.value_counts()[1]
+        alpha_0 = (1-beta)/(1-beta**n0)
+        alpha_1 = (1-beta)/(1-beta**n1)
+        pos_weight = alpha_1/alpha_0
+        return pos_weight
+    elif isinstance(cfg.trainer_args['pos_weight'], (int, float)):
+        return cfg.trainer_args['pos_weight'] 
+    else:
+        return None
 
 def is_plateau(
     best_metric_value: float,
