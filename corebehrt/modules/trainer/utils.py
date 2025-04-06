@@ -13,7 +13,7 @@ def get_sampler(cfg, outcomes: List[int]):
     def _inverse_sqrt(x):
         return 1 / np.sqrt(x)
 
-    def _serge(outcomes):
+    def _effective_n_samples(outcomes):
         labels = pd.Series(outcomes)
         beta = (len(outcomes) - 1) / len(outcomes)
         n0 = labels.value_counts()[0]
@@ -26,8 +26,8 @@ def get_sampler(cfg, outcomes: List[int]):
 
     if cfg.trainer_args.get("sampler", None):
         _, counts = np.unique(np.array(outcomes), return_counts=True)
-        if cfg.trainer_args.get("sample_weight_function", None) == "serge":
-            label_weight = _serge(outcomes)
+        if cfg.trainer_args.get("sample_weight_function", None) == "effective_n_samples":
+            label_weight = _effective_n_samples(outcomes)
         else:
             label_weight = _inverse_sqrt(counts)
 
@@ -47,7 +47,7 @@ def get_pos_weight(cfg, outcomes):
         num_pos = (outcomes_series == 1).sum()
         num_neg = (outcomes_series == 0).sum()
         return np.sqrt(num_neg / num_pos)
-    elif pos_weight == 'serge':
+    elif pos_weight == 'effective_n_samples':
         labels = pd.Series(outcomes).astype(int)
         beta = (len(outcomes)-1)/(len(outcomes))
         n0 = labels.value_counts()[0]
