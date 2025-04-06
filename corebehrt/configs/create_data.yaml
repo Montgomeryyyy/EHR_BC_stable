@@ -10,11 +10,7 @@ paths:
   # code_mapping: ./outputs/code_mapping.pt
   # vocabulary: ./outputs/vocabulary # vocab folder
 
-<<<<<<< HEAD
-# exclude_held_out: true
-=======
 # exclude_held_out: true # exclude held out patients data creation
->>>>>>> upstream/fix_exclude_regex
 
 features:
   exclude_regex: ^(?:LAB).* # example regex to exclude all features that start with 'LAB'
