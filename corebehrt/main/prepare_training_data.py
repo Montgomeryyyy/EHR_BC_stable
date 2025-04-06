@@ -61,23 +61,18 @@ def main_prepare_data(config_path):
             test_pids = torch.load(test_pids_file)
             torch.save(test_pids, join(cfg.paths.prepared_data, TEST_PIDS_FILE))
     
-    elif cfg.data.type == "held_out":
+    elif cfg.data.type == "test":
         DirectoryPreparer(cfg).setup_prepare_held_out()
         logger = logging.getLogger("prepare held_out data")
-        logger.info("Preparing held_out data")
+        logger.info("Preparing testing data")
         # Prepare data
-        _ = DatasetPreparer(cfg).prepare_finetune_data(mode="held_out")
+        combined_data = []
+        for mode in cfg.data.get("test_modes", ["held_out"]):
+            data = DatasetPreparer(cfg).prepare_finetune_data(mode=mode)
+            combined_data.append(data)
 
-    elif cfg.data.type == "all":
-        DirectoryPreparer(cfg).setup_prepare_held_out()
-        logger = logging.getLogger("prepare held_out data")
-        logger.info("Preparing held_out data")
-        # Prepare data
-        pt_data = DatasetPreparer(cfg).prepare_finetune_data(mode="train")
-        ft_data = DatasetPreparer(cfg).prepare_finetune_data(mode="tuning")
-        ho_data = DatasetPreparer(cfg).prepare_finetune_data(mode="held_out")
-        combined_data = PatientDataset.combine_datasets([pt_data, ft_data, ho_data])
-        combined_data.save(cfg.paths.prepared_data)
+        combined_patient_data = PatientDataset.combine_datasets(combined_data)
+        combined_patient_data.save(cfg.paths.prepared_data)
 
     else:
         raise ValueError(f"Unsupported data type: {cfg.data.type}")
