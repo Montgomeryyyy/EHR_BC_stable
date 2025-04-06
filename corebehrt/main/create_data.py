@@ -58,7 +58,11 @@ def main_data(config_path):
             splits = ["train", "tuning"]
         else:
             splits = ["train", "tuning", "held_out"]
+<<<<<<< HEAD
         create_and_save_features(cfg,  splits=splits)
+=======
+        create_and_save_features(cfg, splits)
+>>>>>>> upstream/fix_exclude_regex
         logger.info("Finished feature creation and processing")
 
     logger.info("Tokenizing")
