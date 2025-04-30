@@ -4,14 +4,16 @@ logging:
 
 paths:
   ### Inputs
-  patients_info: ./outputs/features/patient_info.parquet
-  #initial_pids: ./outputs/tokenized/pids_tuning.pt # Initial patients to select from [list of pids] (optional)
-  outcomes: ./outputs/outcomes
+  features: ./outputs/features
+  outcomes: ./outputs/outcomes/
+  exposure: TEST_CENSOR.csv # Exposure, optional, set to outcome if not provided. For multiple exposures, create a joint exposure file.
   outcome: TEST_OUTCOME.csv # Outcome
   # exclude_pids: # optional, if provided, exclude these pids from the cohort
   
   ### Outputs
-  cohort: ./outputs/cohort_absolute # Data directory
+  cohort: ./outputs/test_cohort # Data directory
+
+
 
 selection:
   exclude_prior_outcomes: true # Exclude patients who had the outcome before index date
@@ -24,13 +26,12 @@ selection:
       include: [M] # include only M/ exclude keyword can be used as well.
 
 index_date: # if not provided we can use exposures to get the index dates
-  mode: absolute # absolute or relative (to exposure)
-  absolute:
-    date: 
-      year: 2020
-      month: 1
-      day: 1
-    test_shift_hours: 48 # shift the test set by this many hours
+  mode: relative # absolute or relative (to exposure)
+  absolute: 
+    year: 2015
+    month: 1
+    day: 26
+  relative: # takes first exposure as index date
+    n_hours_from_exposure: -24 # negative means before exposure, 0 by default
 
-cv_folds: 5 # can be set to 1 if only a simple train/val split is needed
-test_ratio: 0.1 # can be set to 1 for test set creation only
+test_ratio: 1.0 # can be set to 1 for test set creation only

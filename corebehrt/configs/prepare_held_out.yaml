@@ -6,24 +6,21 @@ paths:
 ## INPUTS
   features: ./outputs/features
   tokenized: ./outputs/tokenized
-  cohort: ./outputs/cohort # path to cohort directory
+  cohort: ./outputs/test_cohort # path to cohort directory
   outcomes: ./outputs/outcomes
   outcome: TEST_OUTCOME.csv
 
 ## OUTPUTS
-  prepared_data: ./outputs/finetuning/processed_data/ # Save model/outputs to this folder
+  prepared_data: ./outputs/held_out/processed_data/ # Save model/outputs to this folder
   #runs: ./outputs/pretraining # Use for generating a new model folder
   
 
 data:
-  type: "finetune"
+  type: "test"
+  test_modes: ["tuning"] # list with name of features where test data is stored. Only used for test_data
   truncation_len: 30
   min_len: 2 # 0 by default
-  cutoff_date:
-    year: 2020
-    month: 1
-    day: 1
-    
+
 outcome: # we will convert outcomes to binary based on whether at least one outcome is in the follow up window
   n_hours_censoring: -10 # censor time after index date (negative means before)
   n_hours_start_follow_up: 1 # start follow up (considering outcomes) time after index date (negative means before)

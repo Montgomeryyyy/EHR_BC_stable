@@ -20,9 +20,11 @@ class BiGRU(torch.nn.Module):
         self.rnn = torch.nn.GRU(
             hidden_size, hidden_size, batch_first=True, bidirectional=True
         )
+
         # Adjust the input size of the classifier based on the bidirectionality
         classifier_input_size = hidden_size * 2
         self.classifier = torch.nn.Linear(classifier_input_size, 1)
+        self.batch_norm = torch.nn.BatchNorm1d(classifier_input_size)
 
     def forward(
         self, hidden_states: torch.Tensor, attention_mask: torch.Tensor
@@ -47,5 +49,6 @@ class BiGRU(torch.nn.Module):
             :, 0, self.hidden_size :
         ]  # First output from the backward pass
         x = torch.cat((forward_output, backward_output), dim=-1)
+
         x = self.classifier(x)
         return x
