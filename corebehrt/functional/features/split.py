@@ -5,7 +5,7 @@ from typing import Dict, List, Tuple
 import numpy as np
 from sklearn.model_selection import KFold
 
-from corebehrt.constants.data import TRAIN_KEY, VAL_KEY
+from corebehrt.constants.data import TRAIN_KEY, VAL_KEY, TEST_KEY
 from corebehrt.modules.preparation.dataset import PatientDataset
 
 
@@ -128,7 +128,7 @@ def split_into_test_and_train_val_pids(pids: list, test_split: float):
 
 
 def create_folds(
-    pids: list, num_folds: int, seed: int = 42, val_ratio: float = 0.8
+    pids: list, num_folds: int, seed: int = 42, val_ratio: float = 0.2, cv_test: bool = False
 ) -> List[Dict[str, list]]:
     """
     Create k folds from a list of PIDs.
@@ -161,10 +161,19 @@ def create_folds(
         folds = [{TRAIN_KEY: train_pids, VAL_KEY: val_pids}]
     else:
         kf = KFold(n_splits=num_folds, shuffle=True, random_state=seed)
-        folds = [{TRAIN_KEY: [], VAL_KEY: []} for _ in range(num_folds)]
+        if cv_test:
+            folds = [{TRAIN_KEY: [], VAL_KEY: [], TEST_KEY: []} for _ in range(num_folds)]
+            for i, (train_val_idx, test_idx) in enumerate(kf.split(pids_array)):
+                n_val = int(len(train_val_idx) * val_ratio)
+                folds[i][TRAIN_KEY] = pids_array[train_val_idx[n_val:]].tolist()
+                folds[i][VAL_KEY] = pids_array[train_val_idx[:n_val]].tolist()
+                folds[i][TEST_KEY] = pids_array[test_idx].tolist()
 
-        for i, (train_idx, val_idx) in enumerate(kf.split(pids_array)):
-            folds[i][TRAIN_KEY] = [pids_array[idx] for idx in train_idx]
-            folds[i][VAL_KEY] = [pids_array[idx] for idx in val_idx]
+        else:
+            folds = [{TRAIN_KEY: [], VAL_KEY: []} for _ in range(num_folds)]
+
+            for i, (train_idx, val_idx) in enumerate(kf.split(pids_array)):
+                folds[i][TRAIN_KEY] = [pids_array[idx] for idx in train_idx]
+                folds[i][VAL_KEY] = [pids_array[idx] for idx in val_idx]
 
     return folds

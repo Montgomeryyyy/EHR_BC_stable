@@ -4,6 +4,7 @@ INPUTS = {
     "features": {"type": "uri_folder"},
     "initial_pids": {"type": "uri_file", "optional": True},
     "exclude_pids": {"type": "uri_file", "optional": True},
+    "predefined_folds": {"type": "uri_file", "optional": True},
     "outcomes": {"type": "uri_folder"},
 }
 OUTPUTS = {"cohort": {"type": "uri_folder"}}

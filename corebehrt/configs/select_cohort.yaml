@@ -10,9 +10,10 @@ paths:
   exposure: TEST_CENSOR.csv # Exposure, optional, set to outcome if not provided. For multiple exposures, create a joint exposure file.
   outcome: TEST_OUTCOME.csv # Outcome
   # exclude_pids: # optional, if provided, exclude these pids from the cohort
+  # predefined_folds: ./outputs/cohort/finetune/folds.pt # optional, if provided, we will use the folds from the predefined folds file
   
   ### Outputs
-  cohort: ./outputs/cohort/finetune/ # Data directory
+  cohort: ./outputs/cohort/finetune_v3/ # Data directory
 
 
 
@@ -35,6 +36,7 @@ index_date: # if not provided we can use exposures to get the index dates
   relative: # takes first exposure as index date
     n_hours_from_exposure: -24 # negative means before exposure, 0 by default
 
-cv_folds: 2 # can be set to 1 if only a simple train/val split is needed
-val_ratio: 0.1 # only used if cv_folds is set to 1
-test_ratio: 0.1 # can be set to 1 for test set creation only
+cv_folds: 3 # can be set to 1 if only a simple train/val split is needed
+cv_test: false # if true, we will add a test set to the folds
+val_ratio: 0.2 # only used if cv_folds is set to 1 and cv_test is false
+test_ratio: 0.1 # can be set to 1 for test set creation only (separate from folds)

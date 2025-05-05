@@ -38,17 +38,23 @@ def main_select_cohort(config_path: str):
     torch.save(pids, join(path_cfg.cohort, PID_FILE))
     index_dates.to_csv(join(path_cfg.cohort, INDEX_DATES_FILE))
 
-    if len(test_pids) > 0:
-        torch.save(test_pids, join(path_cfg.cohort, TEST_PIDS_FILE))
+    if cfg.paths.get("predefined_folds", False):
+        predefined_folds = torch.load(cfg.paths.predefined_folds)
+        torch.save(predefined_folds, join(path_cfg.cohort, FOLDS_FILE))
 
-    if len(train_val_pids) > 0:
-        folds = create_folds(
-            train_val_pids,
-            cfg.get("cv_folds", 1),
-            cfg.get("seed", 42),
-            cfg.get("val_ratio", 0.1),
-        )
-        torch.save(folds, join(path_cfg.cohort, FOLDS_FILE))
+    else:
+        if len(test_pids) > 0:
+            torch.save(test_pids, join(path_cfg.cohort, TEST_PIDS_FILE))
+
+        if len(train_val_pids) > 0:
+            folds = create_folds(
+                train_val_pids,
+                cfg.get("cv_folds", 1),
+                cfg.get("seed", 42),
+                cfg.get("val_ratio", 0.1),
+                cfg.get("cv_test", False),
+            )
+            torch.save(folds, join(path_cfg.cohort, FOLDS_FILE))
 
 
 if __name__ == "__main__":
